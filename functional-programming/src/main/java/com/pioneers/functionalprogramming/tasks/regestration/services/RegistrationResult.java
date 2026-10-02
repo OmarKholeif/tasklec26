@@ -2,35 +2,24 @@ package com.pioneers.functionalprogramming.tasks.regestration.services;
 
 import java.util.function.Consumer;
 
-public sealed interface RegistrationResult permits RegistrationResult.Success, RegistrationResult.Failure {
+@FunctionalInterface
+public interface RegistrationResult {
 
-    void onSuccess(Consumer<String> action);
-
-    void onFailure(Consumer<String> action);
+    void execute(Consumer<String> successAction, Consumer<String> failAction);
 
     record Success(String message) implements RegistrationResult {
 
         @Override
-        public void onSuccess(final Consumer<String> action) {
-            action.accept(message);
-        }
-
-        @Override
-        public void onFailure(final Consumer<String> action) {
-
+        public void execute(Consumer<String> successAction, Consumer<String> failAction) {
+            successAction.accept(message);
         }
     }
 
     record Failure(String message) implements RegistrationResult {
 
         @Override
-        public void onSuccess(final Consumer<String> action) {
-
-        }
-
-        @Override
-        public void onFailure(final Consumer<String> action) {
-            action.accept(message);
+        public void execute(Consumer<String> successAction, Consumer<String> failAction) {
+            failAction.accept(message);
         }
     }
 }

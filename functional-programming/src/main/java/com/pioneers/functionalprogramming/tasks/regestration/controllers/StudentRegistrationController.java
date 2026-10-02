@@ -25,8 +25,8 @@ public class StudentRegistrationController {
         final RegistrationResult registrationResult = studentRegistrationService.register(registrationRequest);
         final AtomicReference<ResponseEntity<String>> atomicReference = new AtomicReference<>();
 
-        registrationResult.onSuccess(message -> atomicReference.set(ResponseEntity.ok(message)));
-        registrationResult.onFailure(message -> atomicReference.set(ResponseEntity.badRequest().body(message)));
+        registrationResult.execute(message -> atomicReference.set(ResponseEntity.ok(message)),
+                message -> atomicReference.set(ResponseEntity.badRequest().body(message)));
 
         return atomicReference.get();
     }
